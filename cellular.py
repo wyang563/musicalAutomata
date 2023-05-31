@@ -1,9 +1,16 @@
+import random
 
 class AutomataGrid:
     def __init__(self, gridSize, initialState = None):
         self.size = gridSize
         if initialState is None:
-            pass
+            numFillCells = gridSize / 4
+            self.state = [[1 for _ in range(numFillCells)] + 
+                                 [0 for _ in range(gridSize - numFillCells)] for _ in range(gridSize)]
+            self.state = list(map(lambda s: random.shuffle(s), self.state))
         else:
-            self.initialState = list(map(lambda s: s.copy(), initialState))
-            
+            self.state = list(map(lambda s: s.copy(), initialState))
+        
+
+g = AutomataGrid(10)
+print(g.state)
