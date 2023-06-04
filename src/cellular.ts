@@ -124,7 +124,7 @@ export class AutomataGrid {
     
 }
 
-function main(): void {
+async function main(): Promise<void> {
     console.log("Started Running Main");
     const canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement 
                                       ?? assert.fail('missing drawing canvas');
@@ -134,7 +134,7 @@ function main(): void {
                                             ?? assert.fail('button missing');
     const resetButton: HTMLButtonElement = document.getElementById('reset_button') as HTMLButtonElement
                                            ?? assert.fail('button missing');                            
-    let DEFAULT_SIZE = 40;
+    let DEFAULT_SIZE = 55;
     let DEFAULT_ITERS = 1000;
     const client = new AutomataGrid(DEFAULT_SIZE, undefined);
     drawBoard(canvas, client);
@@ -154,11 +154,15 @@ function main(): void {
     // start button
     startButton.addEventListener('click', (event: MouseEvent) => {
         console.log("start button clicked");
-        for (let i = 0; i < DEFAULT_ITERS; i++) {
+        let count = 0;
+        const id = setInterval(function () {
             client.step();
-            setTimeout(() => { 
-                drawBoard(canvas, client);
-            }, 1000);
+            drawBoard(canvas, client);
+            count++;
+        });
+
+        if (count > 1000) {
+            clearInterval(id);
         }
     });
 
