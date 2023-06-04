@@ -22,10 +22,15 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="1024" height="1024"></canvas>
-
-    <div id="outputArea"></div>
-
-    <script src="client-bundle.js"></script>
+    <h1> Musical Automata </h1>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <button id="start_button"> Start Simulation </button>
+    <button id="reset_button"> Reset </button>
+    <form id="iters_form"> 
+        <p>Number of Simulation Iterations </p>
+        <input id="text_box" type="text" name="iters"/>
+        <button id='submit_button' type="submit">Submit</button>
+    </form>
+    <script src="./dist/client-bundle.js"></script>
 </body>
 </html>

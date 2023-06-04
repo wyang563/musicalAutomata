@@ -1,8 +1,28 @@
-import arrayShuffle from 'array-shuffle';
 import assert from 'assert';
+import { drawBoard } from './draw';
 
 export class AutomataGrid {
     private state: number[][];
+
+    /**
+     * it's annoying that I had to copy paste this here to resolve bugs
+     * @param array to shuffle
+     * @returns shuffled array
+     */
+    private arrayShuffle(array: number[]): number[] {
+        if (!Array.isArray(array)) {
+            throw new TypeError(`Expected an array, got ${typeof array}`);
+        }
+    
+        array = [...array];
+    
+        for (let index = array.length - 1; index > 0; index--) {
+            const newIndex = Math.floor(Math.random() * (index + 1));
+            [array[index], array[newIndex]] = [array[newIndex], array[index]];
+        }
+        return array;
+    }
+
     public constructor(
         public readonly gridSize: number,
         private initBoard: number[][] | undefined
@@ -14,7 +34,7 @@ export class AutomataGrid {
             const zeros: Array<number> = Array(this.gridSize - numFillCells).fill(0);
             const row = ones.concat(zeros);
             for (let i = 0; i < this.gridSize; i++) {
-                this.state.push(arrayShuffle(row.map(s => s)));
+                this.state.push(this.arrayShuffle(row.map(s => s)));
             }
         }
         else {
@@ -22,6 +42,7 @@ export class AutomataGrid {
             this.state = this.initBoard.map(s => s.map(t => t));
         }
     }
+
     /**
      * 
      * @param x coord
@@ -92,7 +113,8 @@ export class AutomataGrid {
         }
         for (const change of coordChanges) {
             this.state[change.x][change.y] = (this.state[change.x][change.y] + 1) % 2;
-        }    
+        
+        }
     }
 
     /**
@@ -104,8 +126,48 @@ export class AutomataGrid {
 
 function main(): void {
     console.log("Started Running Main");
-    const outputArea: HTMLElement = document.getElementById('outputArea') ?? assert.fail('missing output area');
-    const canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement ?? assert.fail('missing drawing canvas');
+    const canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement 
+                                      ?? assert.fail('missing drawing canvas');
+    const startButton: HTMLButtonElement = document.getElementById('start_button') as HTMLButtonElement 
+                                           ?? assert.fail('button missing');
+    const submitButton: HTMLButtonElement = document.getElementById('submit_button') as HTMLButtonElement
+                                            ?? assert.fail('button missing');
+    const resetButton: HTMLButtonElement = document.getElementById('reset_button') as HTMLButtonElement
+                                           ?? assert.fail('button missing');                            
+    let DEFAULT_SIZE = 40;
+    let DEFAULT_ITERS = 1000;
+    const client = new AutomataGrid(DEFAULT_SIZE, undefined);
+    drawBoard(canvas, client);
+    // submit button
+
+    submitButton.addEventListener('click', (event: MouseEvent) => {
+        console.log("submit button clicked");
+        const iters = parseInt((<HTMLInputElement>document.getElementById('text_box') ?? assert.fail("missing")).value);
+        if (iters <= 0) {
+            throw new Error("expected iters to be a positive integer");
+        }
+        else {
+            DEFAULT_ITERS = iters;
+        }
+    });
+
+    // start button
+    startButton.addEventListener('click', (event: MouseEvent) => {
+        console.log("start button clicked");
+        for (let i = 0; i < DEFAULT_ITERS; i++) {
+            client.step();
+            setTimeout(() => { 
+                drawBoard(canvas, client);
+            }, 1000);
+        }
+    });
+
+    // reset button
+    resetButton.addEventListener('click', (event: MouseEvent) => {
+        const client = new AutomataGrid(DEFAULT_SIZE, undefined);
+        drawBoard(canvas, client);
+    });
 
 }
 
+main();
