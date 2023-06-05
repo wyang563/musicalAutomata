@@ -122,6 +122,13 @@ export class AutomataGrid {
      * 
      */
     
+
+    /**
+     * 
+     * checkStagnant
+     */
+
+    
 }
 
 async function main(): Promise<void> {
@@ -134,9 +141,9 @@ async function main(): Promise<void> {
                                             ?? assert.fail('button missing');
     const resetButton: HTMLButtonElement = document.getElementById('reset_button') as HTMLButtonElement
                                            ?? assert.fail('button missing');                            
-    let DEFAULT_SIZE = 55;
+    let DEFAULT_SIZE = 56;
     let DEFAULT_ITERS = 1000;
-    const client = new AutomataGrid(DEFAULT_SIZE, undefined);
+    let client = new AutomataGrid(DEFAULT_SIZE, undefined);
     drawBoard(canvas, client);
     // submit button
 
@@ -159,17 +166,17 @@ async function main(): Promise<void> {
             client.step();
             drawBoard(canvas, client);
             count++;
-        });
+        }, 100);
 
         if (count > 1000) {
             clearInterval(id);
         }
-    });
-
-    // reset button
-    resetButton.addEventListener('click', (event: MouseEvent) => {
-        const client = new AutomataGrid(DEFAULT_SIZE, undefined);
-        drawBoard(canvas, client);
+        // reset button
+        resetButton.addEventListener('click', (event: MouseEvent) => {
+            clearInterval(id);
+            client = new AutomataGrid(DEFAULT_SIZE, undefined);
+            drawBoard(canvas, client);
+        });
     });
 
 }
