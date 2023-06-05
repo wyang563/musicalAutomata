@@ -1,0 +1,9 @@
+Peng - 
+
+- toMusic function 
+- checkStagnant 
+
+
+Will - 
+
+- figure out how to play music in a webpage
