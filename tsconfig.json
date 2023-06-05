@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
@@ -105,5 +106,19 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+=======
+  "include": [
+    "./src/*.ts"
+  ],
+  
+  "compilerOptions": {
+    "baseUrl": ".",
+    "strict": true,
+    "target": "ES2021",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "outDir": "dist"
+>>>>>>> 40ac8bd0d82335b410922ad53c68cbe22e31619b
   }
 }
