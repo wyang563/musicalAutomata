@@ -120,13 +120,45 @@ export class AutomataGrid {
     /**
      * toMusic 
      * 
+     * takes in no inputs, sums board columns and finds max
      */
-    
+
+    public toMusic(scale: number | 7): number {
+
+        //get array of the number of live bits per column
+        let bSum = function(r: number[], o: number[]){return r.map(function(b:number, a:number){return o[a] + b})};
+        const noteOptions : number[] = this.state.reduce(bSum)
+
+        // check if 
+        let note: number = 0;
+        let curr : number = 0;
+        let prev : number = 0;
+        let tick : number = 0;
+        let iter : number = this.state.length / scale
+        if(iter != ~~(iter)){
+            throw new Error("Invalid scale or array size")
+        }
+
+
+        // sums up sections of column and returns the maximum set in the array
+        let sum = function(a: number, b: number){return a + b}
+        while(noteOptions.length){
+            tick += 1
+            curr = noteOptions.splice(0, iter).reduce(sum)
+            if(curr > prev){prev = curr; note = tick}
+        }
+
+        return note
+    }   
 
     /**
      * 
      * checkStagnant
      */
+
+    private checkStagnant(): void {
+        
+    }
 
     
 }
