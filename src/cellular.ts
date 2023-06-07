@@ -196,6 +196,7 @@ async function main(): Promise<void> {
         let count = 0;
         const id = setInterval(function () {
             client.step();
+            // client.toMusic(7);
             drawBoard(canvas, client);
             count++;
         }, 100);
