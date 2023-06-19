@@ -1,6 +1,8 @@
 import assert from 'assert';
 import { drawBoard } from './draw';
 
+const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
 export class AutomataGrid {
     private state: number[][];
 
@@ -118,47 +120,28 @@ export class AutomataGrid {
     }
 
     /**
+     * findScale
+     * 
+     * given board state, calculates what base note musical scale to use
+     * by finding number of filled cells and dividing by 12
+     */
+    public findScale(): string {
+        const index = this.state.flatMap(s => s)
+                                .filter(t => t === 1)
+                                .length;
+        return NOTES[index % 12];
+    }
+
+    /**
      * toMusic 
      * 
-     * takes in no inputs, sums board columns and finds max
+     * calculates 
      */
 
     public toMusic(scale: number | 7): number {
 
-        //get array of the number of live bits per column
-        let bSum = function(r: number[], o: number[]){return r.map(function(b:number, a:number){return o[a] + b})};
-        const noteOptions : number[] = this.state.reduce(bSum)
-
-        // check if 
-        let note: number = 0;
-        let curr : number = 0;
-        let prev : number = 0;
-        let tick : number = 0;
-        let iter : number = this.state.length / scale
-        if(iter != ~~(iter)){
-            throw new Error("Invalid scale or array size")
-        }
-
-
-        // sums up sections of column and returns the maximum set in the array
-        let sum = function(a: number, b: number){return a + b}
-        while(noteOptions.length){
-            tick += 1
-            curr = noteOptions.splice(0, iter).reduce(sum)
-            if(curr > prev){prev = curr; note = tick}
-        }
-
-        return note
+        return 0;
     }   
-
-    /**
-     * 
-     * checkStagnant
-     */
-
-    private checkStagnant(): void {
-        
-    }
 
     
 }
@@ -197,10 +180,11 @@ async function main(): Promise<void> {
         const id = setInterval(function () {
             client.step();
             drawBoard(canvas, client);
+            console.log(client.toMusic(7));
             count++;
         }, 100);
 
-        if (count > 1000) {
+        if (count > DEFAULT_ITERS) {
             clearInterval(id);
         }
         // reset button
