@@ -177,8 +177,10 @@ async function main(): Promise<void> {
     startButton.addEventListener('click', (event: MouseEvent) => {
         console.log("start button clicked");
         let count = 0;
+        let note = 0;
         const id = setInterval(function () {
             client.step();
+            note = client.toMusic(7);
             drawBoard(canvas, client);
             console.log(client.toMusic(7));
             count++;
