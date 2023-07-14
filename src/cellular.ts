@@ -139,11 +139,8 @@ export class AutomataGrid {
      */
 
     public toMusic(scale: number | 7): number {
-
         return 0;
-    }   
-
-    
+    }      
 }
 
 async function main(): Promise<void> {
